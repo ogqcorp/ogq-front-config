@@ -89,7 +89,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "✨ *@ogq/front-config* `v${{ steps.version-check.outputs.current-version }}` 가 성공적으로 배포되었습니다!\n\n👤 *배포자:* ${{github.actor}}\n📝 *커밋:* ${{ github.event.commits[0].message }}"
+                    "text": "✨ *@ogq/front-config* `v${{ steps.version-check.outputs.current-version }}` 가 성공적으로 배포되었습니다!\n\n👤 *배포자:* ${{ github.actor }}\n📝 *커밋:* 새 버전 배포"
                   }
                 },
                 {
@@ -146,7 +146,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "😰 *@ogq/front-config* 패키지 배포에 실패했습니다.\n\n👤 *시도자:* ${{github.actor}}\n📝 *커밋:* ${{ github.event.commits[0].message }}\n\n로그를 확인해주세요!"
+                    "text": "😰 *@ogq/front-config* 패키지 배포에 실패했습니다.\n\n👤 *시도자:* ${{ github.actor }}\n📝 *커밋:* 배포 실패\n\n로그를 확인해주세요!"
                   }
                 },
                 {
