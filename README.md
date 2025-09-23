@@ -1,7 +1,7 @@
 # @ogq/front-config
 
-OGQ 프론트엔드 팀을 위한 **ESLint / Prettier 공유 설정 패키지**입니다.  
-서비스 레포지토리에 설치 후 최소한의 설정만 추가하면 일관된 규칙을 바로 적용할 수 있습니다.
+OGQ 프론트엔드 팀을 위한 **ESLint / Prettier 공유 설정 패키지**입니다.
+**모든 ESLint 플러그인과 의존성이 포함되어** 별도 설치 없이 바로 사용할 수 있습니다.
 
 ---
 
@@ -12,6 +12,9 @@ OGQ 프론트엔드 팀을 위한 **ESLint / Prettier 공유 설정 패키지**�
 ```bash
 npm i -D @ogq/front-config
 ```
+
+> ✅ **모든 ESLint 플러그인과 Prettier가 자동으로 함께 설치됩니다!**
+> 별도로 `eslint`, `prettier`, `eslint-plugin-react` 등을 설치할 필요가 없습니다.
 
 ### 2. ESLint 설정
 
@@ -33,13 +36,8 @@ export default [...ogq({ withNext: true, useTs: true })];
 서비스 루트에 `.eslintrc.js` 파일 생성:
 
 ```js
-require("@ogq/eslint-config/patch");
-
 module.exports = {
-  extends: [
-    "@ogq/eslint-config",
-    "@ogq/eslint-config/mixins/react", // React/Next 프로젝트라면 추가
-  ],
+  extends: ["@ogq/front-config/eslint"],
 };
 ```
 
@@ -49,7 +47,7 @@ module.exports = {
 
 ```json
 {
-  "prettier": "@ogq/prettier-config"
+  "prettier": "@ogq/front-config/prettier"
 }
 ```
 
@@ -78,10 +76,10 @@ _저장 시 Prettier 포맷팅과 ESLint fix가 자동 적용됩니다._
 
 1. `npm i -D @ogq/front-config`
 2. ESLint 설정 파일(`eslint.config.mjs` 또는 `.eslintrc.js`) 추가
-3. `package.json`에 `"prettier": "@ogq/prettier-config"` 추가
+3. `package.json`에 `"prettier": "@ogq/front-config/prettier"` 추가
 4. (권장) `.vscode/settings.json`으로 저장 시 자동 포맷/린트 활성화
 
-이 네 단계만 거치면 별도의 플러그인 설치 없이 공통 규칙을 바로 적용할 수 있습니다.
+이 네 단계만 거치면 **모든 ESLint 플러그인이 자동으로 포함되어** 공통 규칙을 바로 적용할 수 있습니다.
 
 ---
 
@@ -92,8 +90,10 @@ Nuxt(Vue) 프로젝트에서는 **Prettier만 적용**하세요.
 ### 설치 및 설정
 
 ```bash
-npm i -D @ogq/front-config prettier@^3
+npm i -D @ogq/front-config
 ```
+
+> ✅ **Prettier도 패키지에 포함되어** 별도 설치가 불필요합니다.
 
 `package.json`에 아래와 같이 추가합니다:
 
