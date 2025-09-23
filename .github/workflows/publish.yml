@@ -20,8 +20,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "18"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
         run: npm ci
@@ -32,19 +32,25 @@ jobs:
       - name: Check if version changed
         id: version-check
         run: |
-          git fetch origin HEAD~1
           CURRENT_VERSION=$(node -p "require('./package.json').version")
-          PREVIOUS_VERSION=$(git show HEAD~1:package.json | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin', 'utf8')).version")
-
           echo "current-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          echo "previous-version=$PREVIOUS_VERSION" >> $GITHUB_OUTPUT
 
-          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
-            echo "version-changed=true" >> $GITHUB_OUTPUT
-            echo "Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
+          # Check if there's a previous commit
+          if git rev-parse HEAD~1 >/dev/null 2>&1; then
+            PREVIOUS_VERSION=$(git show HEAD~1:package.json | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin', 'utf8')).version")
+            echo "previous-version=$PREVIOUS_VERSION" >> $GITHUB_OUTPUT
+
+            if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+              echo "version-changed=true" >> $GITHUB_OUTPUT
+              echo "Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
+            else
+              echo "version-changed=false" >> $GITHUB_OUTPUT
+              echo "No version change detected"
+            fi
           else
-            echo "version-changed=false" >> $GITHUB_OUTPUT
-            echo "No version change detected"
+            echo "previous-version=none" >> $GITHUB_OUTPUT
+            echo "version-changed=true" >> $GITHUB_OUTPUT
+            echo "First commit - publishing version $CURRENT_VERSION"
           fi
 
       - name: Publish to NPM
@@ -76,14 +82,14 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "📦 @ogq/front-config NPM Publish Success"
+                    "text": "🎉 패키지 배포 완료!"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*Package:* `@ogq/front-config`\n*Version:* `v${{ steps.version-check.outputs.current-version }}`\n*Repository:* `${{github.repository}}`\n*Author:* `${{github.actor}}`\n*Commit:* `${{ github.event.commits[0].message }}`"
+                    "text": "✨ *@ogq/front-config* `v${{ steps.version-check.outputs.current-version }}` 가 성공적으로 배포되었습니다!\n\n👤 *배포자:* ${{github.actor}}\n📝 *커밋:* ${{ github.event.commits[0].message }}"
                   }
                 },
                 {
@@ -93,7 +99,7 @@ jobs:
                       "type": "button",
                       "text": {
                         "type": "plain_text",
-                        "text": "View on NPM",
+                        "text": "📦 NPM 보기",
                         "emoji": true
                       },
                       "value": "npm-link",
@@ -104,7 +110,7 @@ jobs:
                       "type": "button",
                       "text": {
                         "type": "plain_text",
-                        "text": "See changes",
+                        "text": "🔍 변경사항",
                         "emoji": true
                       },
                       "value": "github-link",
@@ -133,14 +139,14 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "❌ @ogq/front-config NPM Publish Failed"
+                    "text": "💥 패키지 배포 실패"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*Package:* `@ogq/front-config`\n*Repository:* `${{github.repository}}`\n*Author:* `${{github.actor}}`\n*Commit:* `${{ github.event.commits[0].message }}`"
+                    "text": "😰 *@ogq/front-config* 패키지 배포에 실패했습니다.\n\n👤 *시도자:* ${{github.actor}}\n📝 *커밋:* ${{ github.event.commits[0].message }}\n\n로그를 확인해주세요!"
                   }
                 },
                 {
@@ -150,7 +156,7 @@ jobs:
                       "type": "button",
                       "text": {
                         "type": "plain_text",
-                        "text": "View Logs",
+                        "text": "🔧 로그 확인",
                         "emoji": true
                       },
                       "value": "github-link",
