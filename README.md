@@ -84,3 +84,37 @@ _저장 시 Prettier 포맷팅과 ESLint fix가 자동 적용됩니다._
 이 네 단계만 거치면 별도의 플러그인 설치 없이 공통 규칙을 바로 적용할 수 있습니다.
 
 ---
+
+## Nuxt(Vue) 프로젝트 주의사항
+
+Nuxt(Vue) 프로젝트에서는 **Prettier만 적용**하세요.
+
+### 설치 및 설정
+
+```bash
+npm i -D @ogq/front-config prettier@^3
+```
+
+`package.json`에 아래와 같이 추가합니다:
+
+```json
+{
+  "prettier": "@ogq/front-config/prettier"
+}
+```
+
+### Prettier 사용 방법
+
+- 코드 스타일 검사:
+  ```bash
+  npx prettier --check .
+  ```
+- 전체 파일 자동 수정:
+  ```bash
+  npx prettier -w .
+  ```
+
+> ⚠️ `prettier -w .` 명령은 수백 개 파일을 한 번에 수정할 수 있습니다. 기존 프로젝트라면 다음과 같이 점진적으로 적용하는 것을 권장합니다:
+>
+> - 새로 수정하는 파일만 VS Code의 formatOnSave로 포맷팅
+> - 오래된 파일은 필요할 때만 개별적으로 `prettier -w <파일>` 실행
