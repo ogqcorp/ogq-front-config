@@ -1,0 +1,168 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Check if version changed
+        id: version-check
+        run: |
+          git fetch origin HEAD~1
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          PREVIOUS_VERSION=$(git show HEAD~1:package.json | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin', 'utf8')).version")
+
+          echo "current-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "previous-version=$PREVIOUS_VERSION" >> $GITHUB_OUTPUT
+
+          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+            echo "version-changed=true" >> $GITHUB_OUTPUT
+            echo "Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
+          else
+            echo "version-changed=false" >> $GITHUB_OUTPUT
+            echo "No version change detected"
+          fi
+
+      - name: Publish to NPM
+        if: steps.version-check.outputs.version-changed == 'true'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create Release
+        if: steps.version-check.outputs.version-changed == 'true'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version-check.outputs.current-version }}
+          release_name: Release v${{ steps.version-check.outputs.current-version }}
+          draft: false
+          prerelease: false
+
+      - name: Send success message to Slack
+        if: success() && steps.version-check.outputs.version-changed == 'true'
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "📦 @ogq/front-config NPM Publish Success"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Package:* `@ogq/front-config`\n*Version:* `v${{ steps.version-check.outputs.current-version }}`\n*Repository:* `${{github.repository}}`\n*Author:* `${{github.actor}}`\n*Commit:* `${{ github.event.commits[0].message }}`"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View on NPM",
+                        "emoji": true
+                      },
+                      "value": "npm-link",
+                      "url": "https://www.npmjs.com/package/@ogq/front-config",
+                      "action_id": "npm-link"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "See changes",
+                        "emoji": true
+                      },
+                      "value": "github-link",
+                      "url": "https://github.com/${{ github.repository }}/commit/${{github.sha}}",
+                      "action_id": "github-link"
+                    }
+                  ]
+                },
+                {
+                  "type": "divider"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Send failed message to Slack
+        if: failure()
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "❌ @ogq/front-config NPM Publish Failed"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Package:* `@ogq/front-config`\n*Repository:* `${{github.repository}}`\n*Author:* `${{github.actor}}`\n*Commit:* `${{ github.event.commits[0].message }}`"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Logs",
+                        "emoji": true
+                      },
+                      "value": "github-link",
+                      "url": "https://github.com/${{ github.repository }}/actions",
+                      "action_id": "github-link"
+                    }
+                  ]
+                },
+                {
+                  "type": "divider"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
