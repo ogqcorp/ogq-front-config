@@ -1,0 +1,36 @@
+{
+  "name": "@ogq/front-config",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "files": [
+    "packages/"
+  ],
+  "exports": {
+    "./eslint": "./packages/eslint-config/index.js",
+    "./eslint/flat": "./packages/eslint-config/flat.js",
+    "./prettier": "./packages/prettier-config/index.js"
+  },
+  "peerDependencies": {
+    "eslint": ">=8",
+    "prettier": ">=3"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "lint-staged": "^16.1.6"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": "eslint --fix",
+    "*.{ts,tsx,js,jsx,json,md,css,scss}": "prettier -w"
+  },
+  "scripts": {
+    "test": "exit 0"
+  }
+}

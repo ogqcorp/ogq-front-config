@@ -1,0 +1,21 @@
+{
+  "name": "@ogq/prettier-config",
+  "version": "1.0.0",
+  "description": "OGQ 기술지원본부 프론트엔드 표준 Prettier 컨피그",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "prettier",
+    "config",
+    "ogq",
+    "frontend",
+    "style-guide"
+  ],
+  "author": "OGQ Frontend Team",
+  "license": "ISC",
+  "peerDependencies": {
+    "prettier": ">= 3"
+  }
+}

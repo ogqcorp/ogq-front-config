@@ -1,0 +1,11 @@
+# 의존성 폴더
+node_modules/
+# 로컬 개발 환경 파일
+.env
+.env.local
+
+# IDE 설정 파일
+.vscode/
+
+# 운영체제 관련 파일
+.DS_Store
