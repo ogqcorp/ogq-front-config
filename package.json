@@ -1,6 +1,6 @@
 {
   "name": "@ogq/front-config",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": false,
   "type": "module",
   "workspaces": [
@@ -12,6 +12,7 @@
   "exports": {
     "./eslint": "./packages/eslint-config/index.js",
     "./eslint/flat": "./packages/eslint-config/flat.js",
+    "./eslint/flat.js": "./packages/eslint-config/flat.js",
     "./prettier": "./packages/prettier-config/index.js"
   },
   "dependencies": {
