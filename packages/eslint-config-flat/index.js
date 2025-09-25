@@ -5,9 +5,20 @@ import globals from "globals";
 import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import pluginImport from "eslint-plugin-import";
+import pluginNext from "@next/eslint-plugin-next";
 import tseslint from "typescript-eslint";
 
 export default function ogq({ withNext = false, useTs = false } = {}) {
+  const basePlugins = {
+    react: pluginReact,
+    "react-hooks": pluginReactHooks,
+    import: pluginImport,
+  };
+
+  if (withNext) {
+    basePlugins["@next/next"] = pluginNext;
+  }
+
   const base = [
     js.configs.recommended,
     {
@@ -16,11 +27,7 @@ export default function ogq({ withNext = false, useTs = false } = {}) {
       },
     },
     {
-      plugins: {
-        react: pluginReact,
-        "react-hooks": pluginReactHooks,
-        import: pluginImport,
-      },
+      plugins: basePlugins,
       settings: { react: { version: "detect" } },
       rules: {
         // 🎯 React 관련 유연한 설정
@@ -64,8 +71,16 @@ export default function ogq({ withNext = false, useTs = false } = {}) {
   }
 
   if (withNext) {
+    const nextRecommended = pluginNext.configs?.["core-web-vitals"] ?? {};
+
     base.push({
+      ...nextRecommended,
+      plugins: {
+        ...(nextRecommended.plugins ?? {}),
+        "@next/next": pluginNext,
+      },
       rules: {
+        ...(nextRecommended.rules ?? {}),
         // Next.js 관련도 warning으로
         "@next/next/no-img-element": "warn",
         "react/no-unknown-property": "off",
