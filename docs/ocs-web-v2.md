@@ -10,7 +10,7 @@
 2. 향후 ESLint 마이그레이션 시 고려 사항을 정리
 
 ## 현재 구성 확인
-- `package.json`에 `"prettier": "@ogq/front-config/prettier"`가 선언돼 있습니다.
+- `package.json`에 `"prettier": "@ogq/front-config/prettier"`가 이미 선언되어 있다면 그대로 유지합니다. 없다면 아래 단계에서 추가하세요.
 - `.eslintrc.js`는 Nuxt preset과 Storybook 플러그인만 확장합니다.
 
 ## 권장 운영 방법
