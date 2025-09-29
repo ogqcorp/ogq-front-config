@@ -32,6 +32,12 @@ OGQ 프론트엔드 팀을 위한 ESLint/Prettier 공유 설정입니다. Next.j
 
 필요하면 각 프로젝트의 `rules`, `ignores`를 추가 블록으로 덧붙여 점진적으로 튜닝하세요.
 
+## 네이밍 컨벤션
+
+ESLint로 자동 검사 (warning): 컴포넌트 PascalCase, Hook `use*` 접두사, 변수/함수 camelCase, 상수 UPPER_CASE
+
+코드 리뷰로 관리: 이벤트 핸들러 `handle*`, Boolean props `is*`, 네트워크 함수 `get/fetch/load` 구분
+
 ## 서비스별 적용 가이드
 
 - [chatplus-market-front](docs/chatplus-market-front.md)

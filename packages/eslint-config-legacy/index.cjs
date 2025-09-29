@@ -19,6 +19,41 @@ module.exports = {
     "react-hooks/exhaustive-deps": "warn",
     "@next/next/no-img-element": "warn",
 
+    // 🏷️ 네이밍 컨벤션 (warning으로 점진적 적용)
+    "react/jsx-pascal-case": "warn", // 컴포넌트는 PascalCase
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      // 컴포넌트 함수는 PascalCase
+      {
+        selector: "function",
+        format: ["PascalCase"],
+        filter: {
+          regex: "^[A-Z].*",
+          match: true
+        }
+      },
+      // Hook 함수는 use로 시작하는 camelCase
+      {
+        selector: "function",
+        format: ["camelCase"],
+        filter: {
+          regex: "^use[A-Z].*",
+          match: true
+        }
+      },
+      // 일반 변수와 함수는 camelCase
+      {
+        selector: "variableLike",
+        format: ["camelCase", "PascalCase", "UPPER_CASE"]
+      },
+      // 상수는 UPPER_CASE
+      {
+        selector: "variable",
+        modifiers: ["const"],
+        format: ["camelCase", "PascalCase", "UPPER_CASE"]
+      }
+    ],
+
     // ⚡ 꼭 지켜야 할 중요한 룰들만 error로 유지
     "no-undef": "off", // TypeScript에서 이미 체크함
     "no-unused-vars": "off", // TS version 사용

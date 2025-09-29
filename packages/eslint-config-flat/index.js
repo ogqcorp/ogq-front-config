@@ -35,6 +35,9 @@ export default function ogq({ withNext = false, useTs = false } = {}) {
         "react/jsx-uses-react": "off",
         "react/no-unknown-property": "off",
 
+        // 🏷️ 네이밍 컨벤션 (warning으로 점진적 적용)
+        "react/jsx-pascal-case": "warn", // 컴포넌트는 PascalCase
+
         // ⚡ 중요한 훅 규칙만 error
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
@@ -65,6 +68,40 @@ export default function ogq({ withNext = false, useTs = false } = {}) {
           "@typescript-eslint/ban-ts-comment": "off",
           "@typescript-eslint/no-wrapper-object-types": "warn",
           "@typescript-eslint/no-unused-expressions": "warn",
+
+          // 🏷️ TypeScript 네이밍 컨벤션 (warning)
+          "@typescript-eslint/naming-convention": [
+            "warn",
+            // 컴포넌트 함수는 PascalCase
+            {
+              selector: "function",
+              format: ["PascalCase"],
+              filter: {
+                regex: "^[A-Z].*",
+                match: true
+              }
+            },
+            // Hook 함수는 use로 시작하는 camelCase
+            {
+              selector: "function",
+              format: ["camelCase"],
+              filter: {
+                regex: "^use[A-Z].*",
+                match: true
+              }
+            },
+            // 일반 변수와 함수는 camelCase
+            {
+              selector: "variableLike",
+              format: ["camelCase", "PascalCase", "UPPER_CASE"]
+            },
+            // 상수는 UPPER_CASE
+            {
+              selector: "variable",
+              modifiers: ["const"],
+              format: ["camelCase", "PascalCase", "UPPER_CASE"]
+            }
+          ],
         }
       }))
     );
