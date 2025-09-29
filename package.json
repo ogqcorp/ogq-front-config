@@ -1,6 +1,6 @@
 {
   "name": "@ogq/front-config",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "private": false,
   "type": "module",
   "workspaces": [
@@ -37,6 +37,8 @@
     "typescript-eslint": "^8.14.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
     "lint-staged": "^15.2.0"
   },
   "lint-staged": {
