@@ -24,7 +24,7 @@
 
 ## 점검 명령어
 ```bash
-npm run lint
-npm run lint:fix
+npm run lint   # Nuxt 기본 ESLint 설정 (필요 시)
 ```
-- 경고가 많을 경우, 점진적으로 규칙을 끄거나 팀 룰에 맞춰 수정합니다.
+- 포맷 확인은 Prettier(에디터 `format on save` 혹은 `npx prettier . --check`)로 진행합니다.
+- VS Code를 사용하는 경우 프로젝트 루트의 `.vscode/settings.json`을 그대로 사용하면 저장 시 자동 포맷과 ESLint 자동 수정이 실행됩니다.

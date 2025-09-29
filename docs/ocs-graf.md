@@ -16,7 +16,7 @@
 ### 1. 패키지 설치
 루트에서 실행합니다.
 ```bash
-npm i -D @ogq/front-config
+npm i -D @ogq/front-config @typescript-eslint/parser @typescript-eslint/eslint-plugin
 ```
 모든 워크스페이스에서 같은 버전이 사용되도록 루트 `package.json`에만 추가합니다.
 
@@ -57,4 +57,5 @@ npm run lint
 
 ## 메모
 - 모노레포에서는 ESLint가 워크스페이스 별로 동작하므로, 각 앱 디렉터리에 `npm i -D @ogq/front-config`를 별도로 실행할 필요는 없습니다.
+- 레거시 환경에서는 `@typescript-eslint/parser`, `@typescript-eslint/eslint-plugin`(각각 7.x 이상)이 peer dependency이므로 루트에서 함께 설치되어 있어야 합니다.
 - Next 14는 ESLint 8 기반이므로 `@ogq/front-config/eslint`(CommonJS) 버전을 사용해야 합니다.

@@ -1,7 +1,14 @@
 // ESLint v8 전용 설정 (React/Next.js 프로젝트용)
 // 점진적 도입을 위한 유연한 ESLint 설정
 module.exports = {
-  extends: ["next/core-web-vitals", "next/typescript"],
+  parser: "@typescript-eslint/parser",
+  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
+  plugins: ["@typescript-eslint"],
+  settings: {
+    next: {
+      rootDir: ["app/*/", "./"],
+    },
+  },
   rules: {
     // 🎯 점진적 도입 전략: 대부분 warning으로 설정
     "@typescript-eslint/ban-ts-comment": "off",
